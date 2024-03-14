@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "lead-combinator"
+version = "0.1.0"
+description = ""
+authors = ["Kris Konina <kris.konina@kappados.dev>"]
+readme = "README.md"
+packages = [{include = "lead_combinator"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+openai = "^1.12.0"
+fastapi = "^0.109.2"
+uvicorn = "^0.27.1"
+tenacity = "^8.2.3"
+requests = "^2.31.0"
+orjson = "^3.9.15"
+cysimdjson = "^23.8"
+pysimdjson = "^6.0.2"
+aiofiles = "^23.2.1"
+aiohttp = "^3.9.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
