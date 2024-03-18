@@ -6,8 +6,8 @@ from app.services.krs import run_full
 asyncio.run(
     run_full(
         "P",
-        0,
-        99_999,
+        100000,
+        199_999,
         Path("/tmp/ubuntu/"),
     )
 )
