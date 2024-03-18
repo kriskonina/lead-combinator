@@ -25,3 +25,4 @@ async def read_last_line(filepath: str) -> str:
                 return lines[-1]
             last_line = lines[0]
         return last_line[0]  # Return the last line found
+    

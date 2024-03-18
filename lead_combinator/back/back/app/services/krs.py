@@ -174,11 +174,11 @@ async def run(
 ):
     async with aiohttp.ClientSession() as session:
         tasks = []
-        if (start := config.get("start")) and (end := config.get("end")):
+        if (start := config.get("start") is not None) and (end := config.get("end")):
             iterable = range(start, end)
         elif not (iterable := config.get("indexes")):
             iterable = []
-
+        print(iterable)
         for index in iterable:
             task = asyncio.create_task(
                 process_response(index, session, registry, dump_path, logger)
