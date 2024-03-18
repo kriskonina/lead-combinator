@@ -44,7 +44,7 @@ class FileLogger:
 
     async def log(self, index, status: Status, msg=""):
         async with aiofiles.open(self.file_name, "a") as ff:
-            await ff.write(f"[{datetime.now()}] - {index} - {status} - {msg}\n")
+            await ff.write(f"[{datetime.now()}] - {index} - {status.value} - {msg}\n")
 
 
 async def process_response(index, session, registry, dump_path, logger: FileLogger):
@@ -129,13 +129,6 @@ async def verify_post_run_integrity(log_file: str, dump_folder: Path):
             f"* Warning: Missing files for indexes marked as OK in logs: {missing_files}"
         )
 
-    # Optionally, you could also check for files that shouldn't be there
-    unexpected_files = all_output_indexes - ok_indexes_set
-    if unexpected_files:
-        print(
-            f"* Warning: Found unexpected files not marked as OK in logs: {unexpected_files}"
-        )
-
     # retry the errored records
     if errored_indexes:
         print(f"* Found {len(errored_indexes)} errored indexes. Retrying...")
@@ -165,8 +158,7 @@ async def verify_post_run_integrity(log_file: str, dump_folder: Path):
             + len(liquidated_indexes)
             + len(errored_indexes),
         ],
-        ["Missing Files", len(missing_files)],
-        ["Unexpected Files", len(unexpected_files)],
+        ["Missing Files", len(missing_files)]
     ]
     print(
         f"* Intended range was {min_file_idx} - {max_file_idx}, which is {max_file_idx - min_file_idx} indexes."
@@ -192,9 +184,7 @@ async def run(
                 process_response(index, session, registry, dump_path, logger)
             )
             tasks.append(task)
-            last_line = await read_last_line(logger.file_name)
-            print(f'\r{last_line}             ', end='')
-            await asyncio.sleep(random() * 0.1 + 0.03)  # Simulate variable delay
+            await asyncio.sleep(random() * 0.2 + 0.2)
 
         await asyncio.gather(*tasks)
         print("Finished! Verifying now...")
@@ -211,12 +201,3 @@ async def run_full(
         os.system(f"mkdir -p {dump_path}")
 
     await run({"start": start, "end": end}, dump_path, logger, registry)
-    # async with aiohttp.ClientSession() as session:
-    #     tasks = []
-    #     for index in range(start, end):
-    #         task = asyncio.create_task(process_response(index, session, registry, dump_path, logger))
-    #         tasks.append(task)
-    #         await asyncio.sleep(random() * 0.1 + 0.03)  # Simulate variable delay
-
-    #     await asyncio.gather(*tasks)
-    #     print("Finished! Verifying now...")

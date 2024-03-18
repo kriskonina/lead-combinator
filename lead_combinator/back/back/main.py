@@ -8,7 +8,7 @@ asyncio.run(
         "P",
         700_000,
         799_999,
-        Path("/Users/joekavalieri/git/kappados/lead-combinator/krs/"),
+        Path("/home/ubuntu/"),
     )
 )
 # asyncio.run(verify("/Users/joekavalieri/git/kappados/lead-combinator/krs/raw-200-299"))
